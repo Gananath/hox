@@ -20,7 +20,7 @@ It provides simple text generation and streaming generation through an easy-to-u
 Install Hox from the project source:
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/Gananath/hox.git
 cd hox
 pip install .
 ```
