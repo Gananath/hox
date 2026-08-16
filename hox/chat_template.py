@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional, Union
 from jinja2 import Environment, FileSystemLoader, nodes
 from jinja2.ext import Extension
 from . import config
+from .tools import Tool
 
 
 # In[2]:
@@ -212,7 +213,7 @@ class ChatTemplate:
 
     def apply_chat_template(
         self,
-        conversation,
+        messages,
         tools=None,
         documents=None,
         add_generation_prompt=False,
@@ -239,9 +240,18 @@ class ChatTemplate:
 
         if tokenize:
             raise NotImplementedError("Tokenization is not implemented.")
-
+        
+        if tools is not None:
+            if not isinstance(tools, list):
+                raise TypeError("tools must be a list")
+        
+            if not all(isinstance(tool, Tool) for tool in tools):
+                raise TypeError("All tools must be Tool instances")
+        
+            tools = [tool.schema for tool in tools]
+        
         return self._render_template(
-            messages=conversation,
+            messages=messages,
             tools=tools,
             documents=documents,
             add_generation_prompt=add_generation_prompt,
