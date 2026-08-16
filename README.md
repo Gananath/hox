@@ -150,6 +150,32 @@ response = model.generate(
 print(response)
 ```
 
+### `Tool` usage
+
+Define tools with `@Tool` and pass them to the chat template:
+
+```python
+from hox import OnnxLLM, Tool
+
+@Tool
+def multiply(a: int, b: int) -> int:
+    """Multiply two numbers."""
+    return a * b
+
+tools = [multiply]
+
+messages = [
+    {"role": "system", "content": "You are a helpful assistant."},
+    {"role": "user", "content": "What is 25 * 4?"},
+]
+
+prompt = model.template.apply_chat_template(
+    messages,
+    tools=tools,
+    add_generation_prompt=True,
+)
+```
+
 ## Project Status
 
 Hox is currently under active development. Model compatibility is being expanded, with the current focus on efficient KV-cache based ONNX language model inference.
